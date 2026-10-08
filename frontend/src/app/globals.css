@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* Dark mode: <html data-theme="dark"> (set by lib/theme.ts and the inline script in app/layout.tsx). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  /* Airbnb's own font stack (Cereal is proprietary, so the system font is used as fallback). */
+  --font-sans: "Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  /* Airbnb breakpoints */
+  --breakpoint-sm: 550px;
+  --breakpoint-md: 744px;
+  --breakpoint-lg: 950px;
+  --breakpoint-xl: 1128px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1640px;
+  --breakpoint-4xl: 1880px;
+
+  /* Airbnb palette. Components use these names: text-ink, border-line, bg-soft ... */
+  --color-brand: #ff385c; /* "Rausch" */
+  --color-brand-dark: #e00b41;
+  --color-ink: #222222; /* main text */
+  --color-muted: #6a6a6a; /* secondary text */
+  --color-faint: #b0b0b0; /* disabled text, control borders */
+  --color-line: #dddddd; /* borders */
+  --color-divider: #ebebeb; /* dividers, pressed search bar */
+  --color-soft: #f7f7f7; /* subtle backgrounds and hovers */
+  --color-canvas: #ffffff; /* page and card background */
+  --color-success: #008a05;
+  --color-error: #c13515;
+
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-float: 0 8px 28px rgba(0, 0, 0, 0.28);
+  --shadow-pill: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-active: 0 6px 20px rgba(0, 0, 0, 0.2);
+
+  --animate-slide-up: slide-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-toast-in: toast-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes slide-up {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes toast-in {
+    from { transform: translateY(24px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+/* Dark theme: only the palette changes, components stay the same. */
+[data-theme="dark"] {
+  --color-ink: #f2f2f2;
+  --color-muted: #a8a8a8;
+  --color-faint: #6f6f6f;
+  --color-line: #3d3d3d;
+  --color-divider: #2e2e2e;
+  --color-soft: #232323;
+  --color-canvas: #161616;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Airbnb's pink call-to-action gradient (Reserve, Search, Confirm and pay). */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(to right, #e61e4d 0%, #e31c5f 50%, #d70466 100%);
+}
+
+/* Page width + side padding used by the header, explore grid and footer. */
+@utility page-container {
+  max-width: 2520px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  @media (min-width: 744px) {
+    padding-inline: 40px;
+  }
+  @media (min-width: 1128px) {
+    padding-inline: 80px;
+  }
+}
+
+/* Narrower container for the listing, checkout and trip pages. */
+@utility detail-container {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  @media (min-width: 744px) {
+    padding-inline: 40px;
+  }
+  @media (min-width: 1128px) {
+    padding-inline: 80px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Price pins on the map (Leaflet divIcon markers). */
+.price-pin {
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font: 600 14px var(--font-sans);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease;
+}
+.price-pin:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.price-pin.is-active {
+  background: var(--color-ink);
+  color: var(--color-canvas);
+}
+/* Leaflet's stylesheet is loaded after this file, so these selectors are made more specific. */
+.leaflet-container.leaflet-container {
+  font-family: var(--font-sans);
+}
+.leaflet-container .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.leaflet-container .leaflet-popup-content {
+  margin: 0;
+  width: 280px !important;
+  line-height: 1.4;
+}
+.leaflet-container .leaflet-popup-content a {
+  color: #222222;
+}
+.leaflet-container .leaflet-popup-content p {
+  margin: 0;
+}
+
+/* Dual-thumb price slider in the Filters modal: two range inputs stacked on top of each other. */
+.dual-range {
+  position: absolute;
+  inset-inline: 0;
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+.dual-range::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  height: 32px;
+  width: 32px;
+  border-radius: 9999px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-faint);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  cursor: grab;
+}
+.dual-range::-moz-range-thumb {
+  pointer-events: auto;
+  height: 32px;
+  width: 32px;
+  border-radius: 9999px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-faint);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  cursor: grab;
+}
+
+/* Map marker for a single listing (listing page "Where you'll be"). */
+.home-pin {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--color-brand);
+  color: white;
+  box-shadow: 0 0 0 10px rgba(255, 56, 92, 0.2), 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Dark mode for the map: invert the light OpenStreetMap tiles. */
+[data-theme="dark"] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+}

@@ -1,0 +1,13 @@
+# Python / backend
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/airbnb.db
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
