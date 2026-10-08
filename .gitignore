@@ -7,6 +7,9 @@ backend/airbnb.db
 backend/uploads/*
 !backend/uploads/.gitkeep
 
+node_modules
+
+
 # OS / editors
 .DS_Store
 .idea/
